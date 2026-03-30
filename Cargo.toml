@@ -3,6 +3,7 @@ members = [
     "crates/telemetry-core",
     "crates/telemetry-ac",
     "crates/telemetry-lmu",
+    "crates/session-store",
     "crates/cli",
 ]
 resolver = "2"

@@ -1,9 +1,12 @@
 use nalgebra::Vector3;
+use serde::{Deserialize, Serialize};
+
 use telemetry_core::TelemetrySample;
 use crate::packet::AcPhysicsPacket;
 
+
 /// Sample normalisé construit depuis un AcPhysicsPacket
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AcSample {
     pub timestamp_ms: u64,
     pub physics: AcPhysicsPacket,

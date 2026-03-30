@@ -3,7 +3,7 @@ use bytemuck::{Pod, Zeroable};
 /// Paquet Physics d'Assetto Corsa — 328 octets
 /// Émis ~60 Hz par le plugin UDP
 #[repr(C, packed)]
-#[derive(Copy, Clone, Pod, Zeroable, Debug)]
+#[derive(Copy, Clone, Pod, Zeroable, Debug, Serialize, Deserialize)] 
 pub struct AcPhysicsPacket {
     pub packet_id:          i32,
     pub gas:                f32,

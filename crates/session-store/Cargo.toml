@@ -1,0 +1,14 @@
+[package]
+name = "session-store"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+telemetry-core = { path = "../telemetry-core" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+bincode = "1"
+flate2 = "1"          # compression gzip — réduit ~5x la taille sur fichier
+chrono = { version = "0.4", features = ["serde"] }
