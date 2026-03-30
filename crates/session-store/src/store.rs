@@ -7,7 +7,7 @@ use tracing::{info, debug};
 
 use telemetry_core::{Session, TelemetrySample};
 use crate::format::{
-    ChannelManifest, FORMAT_VERSION, MAGIC, SessionMetadata, StoredSession,
+    ChannelManifest, FORMAT_VERSION, MAGIC, SessionMetadata, // StoredSession,
 };
 use crate::error::StoreError;
 

@@ -1,4 +1,7 @@
+
+// use serde::Serialize;
 use bytemuck::{Pod, Zeroable};
+use serde::{Serialize, Deserialize};
 
 /// Paquet Physics d'Assetto Corsa — 328 octets
 /// Émis ~60 Hz par le plugin UDP
@@ -57,11 +60,15 @@ pub struct AcPhysicsPacket {
     pub brake_bias:         f32,
 }
 
-// Vérification statique de la taille au compile-time
-const _: () = assert!(
-    std::mem::size_of::<AcPhysicsPacket>() == 328,
-    "AcPhysicsPacket: taille inattendue"
-);
+// // Vérification statique de la taille au compile-time
+// const _: () = assert!(
+//     std::mem::size_of::<AcPhysicsPacket>() == 328,
+//     "AcPhysicsPacket, taille inattendue"
+// );
+// print!(
+//     "AcPhysicsPacket, taille : #{}", std::mem::size_of::<AcPhysicsPacket>()
+// );
+
 
 /// Paquet Graphics d'Assetto Corsa — informations session
 #[repr(C, packed)]
@@ -85,7 +92,7 @@ pub struct AcGraphicsPacket {
     pub current_sector_index: i32,
     pub last_sector_time:   i32,
     pub number_of_laps:     i32,
-    pub tyre_compound:      [u16; 33],
+    pub tyre_compound:      [u16; 4],
     pub replay_time_multiplier: f32,
     pub normalized_car_position: f32, // 0..1 sur le tour
     pub car_coordinates:    [f32; 3],

@@ -1,6 +1,11 @@
 use clap::{Parser, Subcommand};
 use tracing_subscriber::EnvFilter;
 
+use telemetry_ac::{AcUdpReader, AcSample};
+use telemetry_core::TelemetrySample;
+use session_store::{SessionStore, format::ChannelManifest};
+
+
 #[derive(Parser)]
 #[command(name = "simracing-fit", about = "Identification de modèles véhicule à partir de télémétrie")]
 struct Cli {
@@ -45,10 +50,6 @@ async fn main() -> anyhow::Result<()> {
 
     match cli.command {
         Commands::RecordAc { addr, max_samples, output } => {
-            use telemetry_ac::{AcUdpReader, AcSample};
-            use telemetry_core::TelemetrySample;
-            use session_store::{SessionStore, format::ChannelManifest};
-
             let reader = AcUdpReader::bind(&addr).await?;
             let session = reader.record_session(max_samples).await?;
 
@@ -81,8 +82,6 @@ async fn main() -> anyhow::Result<()> {
         }
 
         Commands::Info { path } => {
-            use session_store::SessionStore;
-
             let meta = SessionStore::read_metadata(&path)?;
             println!("=== {} ===", path);
             println!("  Simulateur   : {}", meta.simulator);
@@ -102,10 +101,6 @@ async fn main() -> anyhow::Result<()> {
         }
 
         Commands::Replay { path, samples } => {
-            use telemetry_ac::AcSample;
-            use telemetry_core::TelemetrySample;
-            use session_store::SessionStore;
-
             let (meta, loaded): (_, Vec<AcSample>) = SessionStore::load(&path)?;
 
             println!("=== Replay : {} ===", path);

@@ -1,7 +1,11 @@
-use std::net::SocketAddr;
+
+// use std::net::SocketAddr;
 use std::time::{SystemTime, UNIX_EPOCH};
 use tokio::net::UdpSocket;
-use tracing::{debug, warn};
+use tracing::{
+    // debug, 
+    warn,
+};
 
 use telemetry_core::{Session, TelemetryError};
 use crate::packet::AcPhysicsPacket;
@@ -32,10 +36,10 @@ impl AcUdpReader {
             let (len, _addr) = self.socket.recv_from(&mut buf).await?;
             match self.parse_packet(&buf[..len]) {
                 Ok(Some(sample)) => {
-                    debug!(
-                        speed_kmh = sample.physics.speed_kmh,
-                        "sample #{}", session.samples.len()
-                    );
+                    // debug!(
+                    //     speed_kmh = sample.physics.speed_kmh,
+                    //     "sample #{}", session.samples.len()
+                    // );
                     session.push(sample);
                 }
                 Ok(None) => { /* paquet Graphics ou inconnu, on ignore */ }
