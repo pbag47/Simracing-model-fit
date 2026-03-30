@@ -1,0 +1,17 @@
+[package]
+name = "simracing-fit"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "simracing-fit"
+path = "src/main.rs"
+
+[dependencies]
+telemetry-core = { path = "../telemetry-core" }
+telemetry-ac  = { path = "../telemetry-ac" }
+telemetry-lmu = { path = "../telemetry-lmu" }
+tokio = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+clap = { version = "4", features = ["derive"] }
