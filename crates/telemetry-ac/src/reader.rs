@@ -5,6 +5,7 @@ use tokio::net::UdpSocket;
 use tracing::{
     // debug, 
     warn,
+    info
 };
 
 use telemetry_core::{Session, TelemetryError};
@@ -31,23 +32,25 @@ impl AcUdpReader {
     ) -> Result<Session<AcSample>, TelemetryError> {
         let mut session = Session::new("assetto_corsa");
         let mut buf = [0u8; 2048];
+        let mut sample_counter = 0;
 
-        while session.samples.len() < max_samples {
+        // while session.samples.len() < max_samples {
+         while sample_counter < max_samples {
             let (len, _addr) = self.socket.recv_from(&mut buf).await?;
             match self.parse_packet(&buf[..len]) {
                 Ok(Some(sample)) => {
-                    // debug!(
-                    //     speed_kmh = sample.physics.speed_kmh,
-                    //     "sample #{}", session.samples.len()
-                    // );
+                    println!(
+                        "sample #{}", session.samples.len()
+                    );
                     session.push(sample);
                 }
-                Ok(None) => { /* paquet Graphics ou inconnu, on ignore */ }
+                Ok(None) => {println!("unknown packet") /* paquet Graphics ou inconnu, on ignore */ }
                 Err(e) => warn!("Paquet invalide : {e}"),
             }
+            sample_counter = sample_counter + 1
         }
 
-        tracing::info!(
+        info!(
             "Session enregistrée : {} samples, {:.1}s",
             session.samples.len(),
             session.duration_s()
@@ -60,6 +63,13 @@ impl AcUdpReader {
         data: &[u8],
     ) -> Result<Option<AcSample>, TelemetryError> {
         let physics_size = std::mem::size_of::<AcPhysicsPacket>();
+
+        // Expected packet sizes:
+        // 328 -> Car info, physics
+        // 212 -> Lap info
+        // 408 -> Handshake response with session info
+
+        println!("Received #{} bytes, expected #{}", data.len(), physics_size); 
 
         if data.len() < physics_size {
             // Peut être un paquet Graphics (plus petit) — pas une erreur
