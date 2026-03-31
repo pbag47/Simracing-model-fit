@@ -17,8 +17,10 @@ struct Cli {
 enum Commands {
     /// Enregistre une session AC en UDP et la sauvegarde dans un fichier .srf
     RecordAc {
-        #[arg(long, default_value = "0.0.0.0:9996")]
-        addr: String,
+        #[arg(long, default_value = "127.0.0.1:9997")]
+        local_addr: String,
+        #[arg(long, default_value = "127.0.0.1:9996")]
+        ac_addr: String,
         #[arg(long, default_value_t = 3600)]
         max_samples: usize,
         /// Fichier de sortie (défaut : session_<timestamp>.srf)
@@ -49,9 +51,19 @@ async fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
 
     match cli.command {
-        Commands::RecordAc { addr, max_samples, output } => {
-            let reader = AcUdpReader::bind(&addr).await?;
-            let session = reader.record_session(max_samples).await?;
+        Commands::RecordAc { local_addr, ac_addr, max_samples, output } => {
+            let (reader, session_info) = AcUdpReader::connect(&local_addr, &ac_addr).await?;
+
+            println!("Connecté :");
+            println!("  Voiture  : {}", session_info.car_name);
+            println!("  Pilote   : {}", session_info.driver_name);
+            println!("  Circuit  : {}/{}", session_info.track_name, session_info.track_config);
+
+            let mut session = reader.record_session(max_samples).await?;
+            session.car_name   = Some(session_info.car_name);
+            session.track_name = Some(session_info.track_name);
+
+            reader.dismiss().await?;
 
             // Nom de fichier par défaut : session_<timestamp>.srf
             let out_path = output.unwrap_or_else(|| {
