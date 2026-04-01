@@ -4,6 +4,7 @@ members = [
     "crates/telemetry-ac",
     "crates/telemetry-lmu",
     "crates/session-store",
+    "crates/models",
     "crates/cli",
     "crates/viewer",
 ]

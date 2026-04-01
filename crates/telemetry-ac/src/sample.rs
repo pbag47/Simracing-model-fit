@@ -45,7 +45,10 @@ impl TelemetrySample for AcSample {
         }
     }
 
-    fn steering_angle_rad(&self) -> f32 { self.car_info.steer }
+    fn steering_angle_rad(&self) -> f32 {
+        // AC fournit le braquage en degrés — conversion en radians
+        self.car_info.steer.to_radians()
+    }
     fn throttle_norm(&self) -> f32 { self.car_info.gas.clamp(0.0, 1.0) }
     fn brake_norm(&self) -> f32 { self.car_info.brake.clamp(0.0, 1.0) }
     fn gear(&self) -> Option<i8> { Some(self.car_info.gear as i8) }
