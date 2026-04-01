@@ -10,7 +10,6 @@ use bytemuck::{Pod, Zeroable};
 // ── Handshake (client → AC) ───────────────────────────────────────────────
 // Envoyé 2 fois : d'abord operationId=0 (HANDSHAKE), puis operationId=1 (SUBSCRIBE_UPDATE)
 // Exactement 12 octets : 3 × i32 little-endian
-
 #[repr(C)]
 #[derive(Copy, Clone, Pod, Zeroable, Debug)]
 pub struct AcHandshakePacket {
@@ -84,31 +83,8 @@ impl AcHandshakeResponse {
     }
 }
 
-// impl AcHandshakeResponse {
-//     pub fn car_name_str(&self) -> String {
-//         self.car_name
-//     }
-// }
-
+// Assertion invalide
 // const _: () = assert!(std::mem::size_of::<AcHandshakeResponse>() == 408);
-
-// impl AcHandshakeResponse {
-//     pub fn car_name_str(&self) -> String {
-//         null_terminated_ascii(&self.car_name)
-//     }
-//     pub fn driver_name_str(&self) -> String {
-//         null_terminated_ascii(&self.driver_name)
-//     }
-//     pub fn track_name_str(&self) -> String {
-//         null_terminated_ascii(&self.track_name)
-//     }
-//     pub fn track_config_str(&self) -> String {
-//         null_terminated_ascii(&self.track_config)
-//     }
-// }
-
-
-
 
 
 
@@ -119,7 +95,6 @@ impl AcHandshakeResponse {
 // Envoyé à chaque fin de tour (spot event) — 212 octets
 // i32 + i32 + char[50] + char[50] + i32 = 8 + 50 + 50 + 4 = 112 octets
 // Les 100 octets restants sont du padding non documenté.
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AcRtLap {
     pub car_identifier_number: i32,
@@ -127,6 +102,7 @@ pub struct AcRtLap {
     pub driver_name:           String,
     pub car_name:              String,
     pub time_ms:               i32,
+    // pub _pad1:                 [u8; 3],
 }
 
 impl AcRtLap {
@@ -151,22 +127,8 @@ impl AcRtLap {
     }
 }
 
+// Assertion invalide
 // const _: () = assert!(std::mem::size_of::<AcRtLap>() == 212);
-
-// impl AcRtLap {
-//     pub fn driver_name_str(&self) -> String {
-//         null_terminated_ascii(&self.driver_name)
-//     }
-//     pub fn car_name_str(&self) -> String {
-//         null_terminated_ascii(&self.car_name)
-//     }
-//     pub fn lap_time_duration(&self) -> std::time::Duration {
-//         std::time::Duration::from_millis(self.time_ms.max(0) as u64)
-//     }
-// }
-
-
-
 
 
 
@@ -176,35 +138,33 @@ impl AcRtLap {
 // ── RTCarInfo (AC → client, après SUBSCRIBE_UPDATE) ──────────────────────
 // Format officiel de la doc Remote Telemetry — ~328 octets
 // Les bool AC sont des u8 (1 octet chacun)
-
-#[repr(C)]
+#[repr(C, packed)]
 #[derive(Copy, Clone, Pod, Zeroable, Debug, Serialize, Deserialize)]
 pub struct AcRtCarInfo {
-    pub identifier:               u8,      // toujours b'a' (0x61)
-    pub _pad1:                    [u8; 3], // alignement avant le i32
-    pub size:                     i32,
+    pub identifier:               u8,
 
+    pub _pad1:                    [u8; 3],
+
+    pub size:                     i32,
     pub speed_kmh:                f32,
     pub speed_mph:                f32,
     pub speed_ms:                 f32,
-
     pub is_abs_enabled:           u8,
     pub is_abs_in_action:         u8,
     pub is_tc_in_action:          u8,
     pub is_tc_enabled:            u8,
     pub is_in_pit:                u8,
     pub is_engine_limiter_on:     u8,
-    pub _pad2:                    [u8; 2], // alignement avant les f32
+
+    pub _pad2:                    [u8; 2],
 
     pub acc_g_vertical:           f32,
     pub acc_g_horizontal:         f32,
     pub acc_g_frontal:            f32,
-
     pub lap_time_ms:              i32,
     pub last_lap_ms:              i32,
     pub best_lap_ms:              i32,
     pub lap_count:                i32,
-
     pub gas:                      f32,
     pub brake:                    f32,
     pub clutch:                   f32,
@@ -212,7 +172,6 @@ pub struct AcRtCarInfo {
     pub steer:                    f32,
     pub gear:                     i32,
     pub cg_height:                f32,
-
     pub wheel_angular_speed:      [f32; 4],
     pub slip_angle:               [f32; 4],
     pub slip_angle_contact_patch: [f32; 4],
@@ -227,11 +186,12 @@ pub struct AcRtCarInfo {
     pub tyre_radius:              [f32; 4],
     pub tyre_loaded_radius:       [f32; 4],
     pub suspension_height:        [f32; 4],
-
     pub car_position_normalized:  f32,
     pub car_slope:                f32,
     pub car_coordinates:          [f32; 3],
 }
+
+const _: () = assert!(std::mem::size_of::<AcRtCarInfo>() == 328);
 
 
 
