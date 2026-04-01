@@ -121,12 +121,12 @@ async fn main() -> anyhow::Result<()> {
 
             for (i, s) in loaded.iter().take(samples).enumerate() {
                 println!(
-                    "[{i:4}] t={:8}ms  v={:6.1}km/h  ay={:+.3}g  yaw={:+.4}rad/s  steer={:+.4}rad",
+                    "[{i:4}] t={:8}ms  v={:6.1}km/h  ay={:+.3}g  steer_angle={:+.4}rad  throttle={:.2}%",
                     s.timestamp_ms(),
                     s.speed_ms() * 3.6,
                     s.acceleration_g()[0],
-                    s.yaw_rate_rads(),
                     s.steering_angle_rad(),
+                    s.throttle_norm()
                 );
             }
         }

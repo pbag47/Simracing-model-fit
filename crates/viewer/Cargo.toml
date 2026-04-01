@@ -1,0 +1,18 @@
+
+[package]
+name = "viewer"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "viewer"
+path = "src/main.rs"
+
+[dependencies]
+telemetry-core = { path = "../telemetry-core" }
+telemetry-ac   = { path = "../telemetry-ac" }
+session-store  = { path = "../session-store" }
+eframe  = "0.31"
+egui    = "0.31"
+egui_plot = "0.31"
+anyhow  = "1"
