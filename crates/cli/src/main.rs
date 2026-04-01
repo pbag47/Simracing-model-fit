@@ -4,6 +4,7 @@ use tracing_subscriber::EnvFilter;
 use telemetry_ac::{AcUdpReader, AcSample};
 use telemetry_core::TelemetrySample;
 use session_store::{SessionStore, format::ChannelManifest};
+use identification::{SampleFilter, FilterCriteria};
 
 
 #[derive(Parser)]
@@ -36,6 +37,12 @@ enum Commands {
         path: String,
         #[arg(long, default_value_t = 10)]
         samples: usize,
+    },
+    /// Analyse les samples valides pour l'identification bicyclette
+    FilterStats {
+        path: String,
+        #[arg(long, default_value = "default")]
+        criteria: String, // "default" ou "relaxed"
     },
 }
 
@@ -130,6 +137,20 @@ async fn main() -> anyhow::Result<()> {
                 );
             }
         }
+
+        Commands::FilterStats { path, criteria } => {
+            let (_, samples): (_, Vec<AcSample>) = SessionStore::load(&path)?;
+            let crit = if criteria == "relaxed" {
+                FilterCriteria::relaxed()
+            } else {
+                FilterCriteria::default()
+            };
+
+            let (accepted, stats) = SampleFilter::filter(&samples, &crit);
+            stats.print_summary();
+            println!("\nSamples utilisables pour identification : {}", accepted.len());
+        }
+
     }
 
     Ok(())

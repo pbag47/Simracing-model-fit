@@ -11,6 +11,7 @@ path = "src/main.rs"
 telemetry-core = { path = "../telemetry-core" }
 telemetry-ac  = { path = "../telemetry-ac" }
 telemetry-lmu = { path = "../telemetry-lmu" }
+identification = { path = "../identification" }
 tokio = { workspace = true }
 tracing = { workspace = true }
 tracing-subscriber = { version = "0.3", workspace = true, features = ["env-filter"]}

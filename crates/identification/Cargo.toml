@@ -1,0 +1,11 @@
+[package]
+name = "identification"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+telemetry-core = { path = "../telemetry-core" }
+models         = { path = "../models" }
+nalgebra       = { workspace = true }
+serde          = { workspace = true }
+tracing        = { workspace = true }
