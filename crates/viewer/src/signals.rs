@@ -1,5 +1,4 @@
-use telemetry_ac::AcSample;
-use telemetry_core::TelemetrySample;
+use telemetry::{TelemetrySample, AcSample};
 
 /// Un canal = une série temporelle extraite de la session
 #[derive(Clone)]
@@ -32,7 +31,6 @@ impl Signal {
 
 /// Tous les canaux extraits d'une session AC
 pub struct SessionSignals {
-    pub duration_s: f64,
     pub signals: Vec<Signal>,
 }
 
@@ -102,19 +100,33 @@ impl SessionSignals {
             ws_rr   .push(t, ws[3] as f64);
         }
 
-        let duration_s = samples.last()
-            .map(|s| (s.timestamp_ms() as f64 - t0) / 1000.0)
-            .unwrap_or(0.0);
-
         SessionSignals {
-            duration_s,
             signals: vec![
-                speed, throttle, brake, steer,
-                acc_lat, acc_lon, yaw_rate, gear, rpm,
-                susp_fl, susp_fr, susp_rl, susp_rr,
-                slip_fl, slip_fr, slip_rl, slip_rr,
-                load_fl, load_fr, load_rl, load_rr,
-                ws_fl, ws_fr, ws_rl, ws_rr,
+                speed, 
+                throttle, 
+                brake, 
+                steer,
+                acc_lat, 
+                acc_lon, 
+                yaw_rate, 
+                gear, 
+                rpm,
+                susp_fl, 
+                susp_fr, 
+                susp_rl, 
+                susp_rr,
+                slip_fl, 
+                slip_fr, 
+                slip_rl, 
+                slip_rr,
+                load_fl, 
+                load_fr, 
+                load_rl, 
+                load_rr,
+                ws_fl, 
+                ws_fr, 
+                ws_rl, 
+                ws_rr,
             ],
         }
     }

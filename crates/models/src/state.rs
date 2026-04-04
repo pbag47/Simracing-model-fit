@@ -39,7 +39,7 @@ pub struct VehicleState {
 /// Entrées de commande du véhicule.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct VehicleInput {
-    /// Angle de braquage de la roue (pas du volant) (rad)
+    /// Angle de braquage du volant (rad)
     pub steering_wheel_rad: f64,
     /// Gaz normalisé 0..1
     pub throttle: f64,
@@ -52,7 +52,7 @@ pub struct VehicleInput {
 impl VehicleState {
     /// Construit un état depuis un sample de télémétrie AC.
     /// `vx` est estimé depuis la vitesse scalaire (hypothèse : glisse latérale faible).
-    pub fn from_sample(s: &impl telemetry_core::TelemetrySample) -> Self {
+    pub fn from_sample(s: &impl telemetry::TelemetrySample) -> Self {
         let a = s.acceleration_g();
         Self {
             vx: s.speed_ms() as f64,
@@ -75,12 +75,13 @@ impl VehicleState {
 
 impl VehicleInput {
     pub fn from_sample(
-        s: &impl telemetry_core::TelemetrySample,
-        steering_ratio: f64,
+        s: &impl telemetry::TelemetrySample,
+        // steering_ratio: f64,
     ) -> Self {
         Self {
             // Le braquage télémétrie est l'angle volant — on divise par le rapport de direction
-            steering_wheel_rad: s.steering_angle_rad() as f64 / steering_ratio,
+            // steering_wheel_rad: s.steering_angle_rad() as f64 / steering_ratio,
+            steering_wheel_rad: s.steering_angle_rad() as f64,
             throttle: s.throttle_norm() as f64,
             brake: s.brake_norm() as f64,
             gear: s.gear(),

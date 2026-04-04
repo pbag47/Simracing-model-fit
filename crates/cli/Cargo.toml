@@ -8,14 +8,12 @@ name = "simracing-fit"
 path = "src/main.rs"
 
 [dependencies]
-telemetry-core = { path = "../telemetry-core" }
-telemetry-ac  = { path = "../telemetry-ac" }
-telemetry-lmu = { path = "../telemetry-lmu" }
+telemetry = { path = "../telemetry" }
 identification = { path = "../identification" }
+session-store = { path = "../session-store" }
 tokio = { workspace = true }
 tracing = { workspace = true }
 tracing-subscriber = { version = "0.3", workspace = true, features = ["env-filter"]}
 clap = { version = "4", features = ["derive"] }
-session-store = { path = "../session-store" }
 chrono = { version = "0.4", features = ["serde"] }
 anyhow = "1"

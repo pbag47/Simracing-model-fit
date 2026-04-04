@@ -9,8 +9,7 @@ name = "viewer"
 path = "src/main.rs"
 
 [dependencies]
-telemetry-core = { path = "../telemetry-core" }
-telemetry-ac   = { path = "../telemetry-ac" }
+telemetry = { path = "../telemetry" }
 session-store  = { path = "../session-store" }
 eframe  = "0.31"
 egui    = "0.31"

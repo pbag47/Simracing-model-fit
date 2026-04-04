@@ -1,7 +1,7 @@
 use egui::{Color32, Context, ScrollArea, Stroke, Vec2};
 use egui_plot::{Legend, Line, Plot, PlotPoints};
 use session_store::SessionStore;
-use telemetry_ac::AcSample;
+use telemetry::AcSample;
 
 use crate::signals::{SessionSignals, Signal};
 

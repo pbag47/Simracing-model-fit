@@ -1,8 +1,6 @@
 [workspace]
 members = [
-    "crates/telemetry-core",
-    "crates/telemetry-ac",
-    "crates/telemetry-lmu",
+    "crates/telemetry",
     "crates/session-store",
     "crates/models",
     "crates/identification",
@@ -12,6 +10,7 @@ members = [
 resolver = "2"
 
 [workspace.dependencies]
+bytemuck = { version = "1", features = ["derive"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tokio = { version = "1", features = ["full"] }

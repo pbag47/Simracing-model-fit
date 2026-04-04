@@ -5,7 +5,7 @@ use serde::{de::DeserializeOwned, Serialize};
 use flate2::{read::GzDecoder, write::GzEncoder, Compression};
 use tracing::{info, debug};
 
-use telemetry_core::{Session, TelemetrySample};
+use telemetry::{Session, TelemetrySample};
 use crate::format::{
     ChannelManifest, FORMAT_VERSION, MAGIC, SessionMetadata, // StoredSession,
 };

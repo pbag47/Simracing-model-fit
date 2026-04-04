@@ -1,9 +1,8 @@
 [package]
-name = "telemetry-core"
+name = "telemetry_core"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-serde = { workspace = true }
 thiserror = { workspace = true }
 nalgebra = { workspace = true }

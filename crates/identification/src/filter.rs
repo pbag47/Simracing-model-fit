@@ -1,4 +1,4 @@
-use telemetry_core::TelemetrySample;
+use telemetry::TelemetrySample;
 
 /// Critères de validité pour l'identification du modèle bicyclette linéaire.
 /// Chaque critère correspond à une hypothèse du modèle.

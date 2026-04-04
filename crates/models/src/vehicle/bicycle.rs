@@ -112,44 +112,6 @@ impl VehicleModel for BicycleModel {
         "Bicyclette linéaire"
     }
 
-    // fn default_params(&self) -> BicycleParams {
-    //     BicycleParams::default()
-    // }
-
-    // fn validate_params(p: &BicycleParams) -> Result<(), ModelError> {
-    //     if p.cornering_stiffness_front <= 0.0 {
-    //         return Err(ModelError::InvalidParameters(
-    //             "cornering_stiffness_front doit être > 0".into()
-    //         ));
-    //     }
-    //     if p.cornering_stiffness_rear <= 0.0 {
-    //         return Err(ModelError::InvalidParameters(
-    //             "cornering_stiffness_rear doit être > 0".into()
-    //         ));
-    //     }
-    //     if p.yaw_inertia <= 0.0 {
-    //         return Err(ModelError::InvalidParameters(
-    //             "yaw_inertia doit être > 0".into()
-    //         ));
-    //     }
-    //     if p.mass <= 0.0 {
-    //         return Err(ModelError::InvalidParameters(
-    //             "mass doit être > 0".into()
-    //         ));
-    //     }
-    //     if p.l_front <= 0.0 || p.l_rear <= 0.0 {
-    //         return Err(ModelError::InvalidParameters(
-    //             "l_front et l_rear doivent être > 0".into()
-    //         ));
-    //     }
-    //     if p.steering_ratio <= 0.0 {
-    //         return Err(ModelError::InvalidParameters(
-    //             "steering_ratio doit être > 0".into()
-    //         ));
-    //     }
-    //     Ok(())
-    // }
-
 
 
     /// Intègre les équations du mouvement du modèle bicyclette.
@@ -182,7 +144,7 @@ impl VehicleModel for BicycleModel {
         let vx = state.vx.max(0.5); // évite la division par zéro à vitesse nulle
         let vy = state.vy;
         let r  = state.yaw_rate;    // ψ̇
-        let delta = input.steering_wheel_rad; // déjà en angle roue
+        let delta = input.steering_wheel_rad / p.steering_ratio; // déjà en angle roue
 
         let cf = p.cornering_stiffness_front;
         let cr = p.cornering_stiffness_rear;

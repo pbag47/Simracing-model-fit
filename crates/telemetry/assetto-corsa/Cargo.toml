@@ -1,0 +1,13 @@
+[package]
+name = "telemetry_assetto_corsa"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+telemetry_core = { path = "../core"}
+tracing = { workspace = true }
+serde = { workspace = true }
+thiserror = { workspace = true }
+nalgebra = { workspace = true }
+bytemuck = { workspace = true }
+tokio = { workspace = true }

@@ -1,4 +1,4 @@
-use telemetry_core::TelemetrySample;
+use telemetry::TelemetrySample;
 use models::{VehicleModel, VehicleState, VehicleInput};
 use models::vehicle::bicycle::{BicycleModel, BicycleParams};
 
@@ -68,7 +68,7 @@ impl ModelEvaluator {
             };
 
             let state = VehicleState::from_sample(s);
-            let input = VehicleInput::from_sample(s, params.steering_ratio);
+            let input = VehicleInput::from_sample(s);
 
             match model.step(&state, &input, params, dt) {
                 Ok(predicted) => {

@@ -1,8 +1,7 @@
 use clap::{Parser, Subcommand};
 use tracing_subscriber::EnvFilter;
 
-use telemetry_ac::{AcUdpReader, AcSample};
-use telemetry_core::TelemetrySample;
+use telemetry::{TelemetrySample, AcSample, AcUdpReader};
 use session_store::{SessionStore, format::ChannelManifest};
 use identification::{SampleFilter, FilterCriteria};
 

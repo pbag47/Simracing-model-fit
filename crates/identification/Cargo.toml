@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-telemetry-core = { path = "../telemetry-core" }
+telemetry      = { path = "../telemetry" }
 models         = { path = "../models" }
 nalgebra       = { workspace = true }
 serde          = { workspace = true }

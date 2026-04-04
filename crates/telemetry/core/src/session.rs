@@ -1,4 +1,4 @@
-use crate::TelemetrySample;
+use crate::sample::TelemetrySample;
 
 /// Une session = une liste ordonnée de samples + métadonnées.
 pub struct Session<S: TelemetrySample> {

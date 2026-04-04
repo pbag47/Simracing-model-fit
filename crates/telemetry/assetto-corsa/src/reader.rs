@@ -6,11 +6,12 @@ use tokio::time::timeout;
 use bytemuck::bytes_of;
 use tracing::{debug, info, warn};
 
-use telemetry_core::{Session, TelemetryError};
+use telemetry_core::session::Session;
+use telemetry_core::error::TelemetryError;
 use crate::packet::{
     AcHandshakePacket, AcHandshakeResponse, AcRtCarInfo, AcRtLap,
 };
-use crate::sample::AcSample;
+use crate::AcSample;
 
 /// Informations de session récupérées lors du handshake
 #[derive(Debug, Clone)]

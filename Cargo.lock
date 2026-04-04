@@ -1691,7 +1691,7 @@ dependencies = [
  "models",
  "nalgebra",
  "serde",
- "telemetry-core",
+ "telemetry",
  "tracing",
 ]
 
@@ -2033,7 +2033,7 @@ version = "0.1.0"
 dependencies = [
  "nalgebra",
  "serde",
- "telemetry-core",
+ "telemetry",
  "thiserror 1.0.69",
 ]
 
@@ -3041,7 +3041,7 @@ dependencies = [
  "flate2",
  "serde",
  "serde_json",
- "telemetry-core",
+ "telemetry",
  "thiserror 1.0.69",
  "tracing",
 ]
@@ -3126,9 +3126,7 @@ dependencies = [
  "clap",
  "identification",
  "session-store",
- "telemetry-ac",
- "telemetry-core",
- "telemetry-lmu",
+ "telemetry",
  "tokio",
  "tracing",
  "tracing-subscriber",
@@ -3315,37 +3313,35 @@ dependencies = [
 ]
 
 [[package]]
-name = "telemetry-ac"
+name = "telemetry"
+version = "0.1.0"
+dependencies = [
+ "nalgebra",
+ "serde",
+ "telemetry_assetto_corsa",
+ "telemetry_core",
+ "thiserror 1.0.69",
+]
+
+[[package]]
+name = "telemetry_assetto_corsa"
 version = "0.1.0"
 dependencies = [
  "bytemuck",
  "nalgebra",
  "serde",
- "telemetry-core",
+ "telemetry_core",
  "thiserror 1.0.69",
  "tokio",
  "tracing",
 ]
 
 [[package]]
-name = "telemetry-core"
+name = "telemetry_core"
 version = "0.1.0"
 dependencies = [
  "nalgebra",
- "serde",
  "thiserror 1.0.69",
-]
-
-[[package]]
-name = "telemetry-lmu"
-version = "0.1.0"
-dependencies = [
- "bytemuck",
- "nalgebra",
- "telemetry-core",
- "thiserror 1.0.69",
- "tokio",
- "tracing",
 ]
 
 [[package]]
@@ -3689,8 +3685,7 @@ dependencies = [
  "egui",
  "egui_plot",
  "session-store",
- "telemetry-ac",
- "telemetry-core",
+ "telemetry",
 ]
 
 [[package]]

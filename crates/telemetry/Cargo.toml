@@ -1,0 +1,11 @@
+[package]
+name = "telemetry"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+telemetry_core = { path = "core"}
+telemetry_assetto_corsa = { path = "assetto-corsa"}
+serde = { workspace = true }
+thiserror = { workspace = true }
+nalgebra = { workspace = true }
