@@ -3316,6 +3316,9 @@ dependencies = [
 name = "telemetry"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
+ "chrono",
+ "clap",
  "nalgebra",
  "serde",
  "telemetry_assetto_corsa",

@@ -1,7 +1,7 @@
 use egui::{Color32, Context, ScrollArea, Stroke, Vec2};
 use egui_plot::{Legend, Line, Plot, PlotPoints};
 use session_store::SessionStore;
-use telemetry::AcSample;
+use telemetry::GenericSample;
 
 use crate::signals::{SessionSignals, Signal};
 
@@ -47,7 +47,7 @@ impl ViewerApp {
     }
 
     fn reload(&mut self) {
-        match SessionStore::load::<AcSample, _>(&self.file_path) {
+        match SessionStore::load::<GenericSample, _>(&self.file_path) {
             Ok((meta, samples)) => {
                 let ss = SessionSignals::from_ac_samples(&samples);
                 let n = ss.signals.len();

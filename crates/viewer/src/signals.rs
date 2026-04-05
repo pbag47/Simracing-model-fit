@@ -1,4 +1,4 @@
-use telemetry::{TelemetrySample, AcSample};
+use telemetry::{TelemetrySample, GenericSample};
 
 /// Un canal = une série temporelle extraite de la session
 #[derive(Clone)]
@@ -35,7 +35,7 @@ pub struct SessionSignals {
 }
 
 impl SessionSignals {
-    pub fn from_ac_samples(samples: &[AcSample]) -> Self {
+    pub fn from_ac_samples(samples: &[GenericSample]) -> Self {
         let t0 = samples.first().map(|s| s.timestamp_ms()).unwrap_or(0) as f64;
 
         // Déclare ici tous les canaux qu'on veut exposer
@@ -81,7 +81,7 @@ impl SessionSignals {
             acc_lon .push(t, a[1] as f64);
             yaw_rate.push(t, s.yaw_rate_rads() as f64);
             gear    .push(t, s.gear().unwrap_or(0) as f64);
-            rpm     .push(t, s.car_info.engine_rpm as f64);
+            rpm.push(t, s.engine_rpm().unwrap_or(0.0) as f64);
             susp_fl .push(t, susp[0] as f64);
             susp_fr .push(t, susp[1] as f64);
             susp_rl .push(t, susp[2] as f64);

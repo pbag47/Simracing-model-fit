@@ -1,7 +1,7 @@
 use clap::{Parser, Subcommand};
 use tracing_subscriber::EnvFilter;
 
-use telemetry::{TelemetrySample, AcSample, AcUdpReader};
+use telemetry::{GenericSample, SimulatorKind, TelemetrySample};
 use session_store::{SessionStore, format::ChannelManifest};
 use identification::{SampleFilter, FilterCriteria};
 
@@ -15,12 +15,14 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Enregistre une session AC en UDP et la sauvegarde dans un fichier .srf
-    RecordAc {
+    /// Enregistre une session UDP dans un fichier .srf
+    Record {
+        #[arg(long, default_value = "ac")]
+        simulator: SimulatorKind,
         #[arg(long, default_value = "127.0.0.1:9997")]
         local_addr: String,
         #[arg(long, default_value = "127.0.0.1:9996")]
-        ac_addr: String,
+        udp_server_addr: String,
         #[arg(long, default_value_t = 3600)]
         max_samples: usize,
         /// Fichier de sortie (défaut : session_<timestamp>.srf)
@@ -57,19 +59,8 @@ async fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
 
     match cli.command {
-        Commands::RecordAc { local_addr, ac_addr, max_samples, output } => {
-            let (reader, session_info) = AcUdpReader::connect(&local_addr, &ac_addr).await?;
-
-            println!("Connecté :");
-            println!("  Voiture  : {}", session_info.car_name);
-            println!("  Pilote   : {}", session_info.driver_name);
-            println!("  Circuit  : {}/{}", session_info.track_name, session_info.track_config);
-
-            let mut session = reader.record_session(max_samples).await?;
-            session.car_name   = Some(session_info.car_name);
-            session.track_name = Some(session_info.track_name);
-
-            reader.dismiss().await?;
+        Commands::Record { simulator, local_addr, udp_server_addr, max_samples, output } => {
+            let session = telemetry::record(simulator, &local_addr, &udp_server_addr, max_samples).await?;
 
             // Nom de fichier par défaut : session_<timestamp>.srf
             let out_path = output.unwrap_or_else(|| {
@@ -108,8 +99,7 @@ async fn main() -> anyhow::Result<()> {
             println!("  Enregistré   : {}", meta.recorded_at.format("%Y-%m-%d %H:%M:%S UTC"));
             println!("  Samples      : {}", meta.sample_count);
             println!("  Durée        : {:.1}s", meta.duration_s);
-            println!("  Fréquence    : {:.0} Hz",
-                meta.sample_rate_hz.unwrap_or(0.0));
+            println!("  Fréquence    : {:.0} Hz",meta.sample_rate_hz.unwrap_or(0.0));
             println!("  Canaux       :");
             println!("    suspension_travel : {}", meta.channels.suspension_travel);
             println!("    tyre_slip         : {}", meta.channels.tyre_slip);
@@ -119,7 +109,7 @@ async fn main() -> anyhow::Result<()> {
         }
 
         Commands::Replay { path, samples } => {
-            let (meta, loaded): (_, Vec<AcSample>) = SessionStore::load(&path)?;
+            let (meta, loaded): (_, Vec<GenericSample>) = SessionStore::load(&path)?;
 
             println!("=== Replay : {} ===", path);
             println!("Sim={} | {} samples | {:.1}s\n",
@@ -138,7 +128,7 @@ async fn main() -> anyhow::Result<()> {
         }
 
         Commands::FilterStats { path, criteria } => {
-            let (_, samples): (_, Vec<AcSample>) = SessionStore::load(&path)?;
+            let (_, samples): (_, Vec<GenericSample>) = SessionStore::load(&path)?;
             let crit = if criteria == "relaxed" {
                 FilterCriteria::relaxed()
             } else {

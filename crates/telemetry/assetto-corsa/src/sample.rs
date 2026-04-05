@@ -52,6 +52,7 @@ impl TelemetrySample for AcSample {
     fn throttle_norm(&self) -> f32 { self.car_info.gas.clamp(0.0, 1.0) }
     fn brake_norm(&self) -> f32 { self.car_info.brake.clamp(0.0, 1.0) }
     fn gear(&self) -> Option<i8> { Some(self.car_info.gear as i8) }
+    fn engine_rpm(&self) -> Option<f32> { Some(self.car_info.engine_rpm) }
 
     fn wheel_speed_ms(&self) -> [f32; 4] {
         // tyre_radius est fourni dynamiquement par AC — on l'utilise directement

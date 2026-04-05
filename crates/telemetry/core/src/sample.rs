@@ -13,6 +13,7 @@ pub trait TelemetrySample: Send + Sync + 'static {
     fn yaw_rate_rads(&self) -> f32;
     fn pitch_rate_rads(&self) -> Option<f32> { None }
     fn roll_rate_rads(&self) -> Option<f32> { None }
+    fn engine_rpm(&self) -> Option<f32> { None }
 
     // --- Direction & commandes ---
     fn steering_angle_rad(&self) -> f32;

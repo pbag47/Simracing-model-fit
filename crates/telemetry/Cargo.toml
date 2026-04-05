@@ -9,3 +9,6 @@ telemetry_assetto_corsa = { path = "assetto-corsa"}
 serde = { workspace = true }
 thiserror = { workspace = true }
 nalgebra = { workspace = true }
+clap = { workspace = true }
+anyhow = { workspace = true }
+chrono = { workspace = true }
